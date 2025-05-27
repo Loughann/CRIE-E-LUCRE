@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Clock, Terminal, Code, Cpu, Star, CheckCircle, ArrowRight } from "lucide-react"
+import { Clock, Terminal, Code, Cpu, Star, CheckCircle, ArrowRight, AlertTriangle, Gift, Zap, DollarSign, Lock } from "lucide-react"
 import Image from "next/image"
 
 export default function OfertaPage() {
@@ -13,6 +13,7 @@ export default function OfertaPage() {
   const [isLoaded, setIsLoaded] = useState(false)
   const [timeLeft, setTimeLeft] = useState(900) // 15 minutes in seconds
   const [earnings, setEarnings] = useState(0)
+  const [remainingSpots, setRemainingSpots] = useState(7)
 
   useEffect(() => {
     // Check if user has started the game
@@ -39,7 +40,17 @@ export default function OfertaPage() {
       })
     }, 1000)
 
-    return () => clearInterval(timer)
+    // Simulate decreasing spots
+    const spotTimer = setInterval(() => {
+      if (Math.random() > 0.7 && remainingSpots > 1) {
+        setRemainingSpots((prev) => prev - 1)
+      }
+    }, 45000) // Random spot decrease every ~45 seconds
+
+    return () => {
+      clearInterval(timer)
+      clearInterval(spotTimer)
+    }
   }, [router])
 
   const formatTime = (seconds: number) => {
@@ -66,15 +77,16 @@ export default function OfertaPage() {
         <pre className="text-xs text-green-500 animate-scroll whitespace-pre-wrap">
           {Array(50)
             .fill(
-              "function hackAI() { return generateIncome(100); } // AI income generator\nconst prompt = new AIPrompt('Create landing page');\nconst result = ChatGPT.execute(prompt);\nif (result.quality > 0.8) { client.pay(500); }\n",
+              "function generateAIIncome() { return prompt.execute(); }\nconst income = new PassiveIncome('AI');\nconst result = income.generate(500);\nif (result.success) { client.pay(500); }\n",
             )
             .join("")}
         </pre>
       </div>
 
       <div className="max-w-4xl mx-auto">
+        {/* Header with Timer */}
         <div className="text-center mb-8">
-          <div className="flex items-center justify-center space-x-2 mb-2">
+          <div className="inline-flex items-center justify-center space-x-2 mb-2">
             <Terminal className="h-6 w-6 text-green-400" />
             <h1 className="text-3xl font-bold text-green-400 font-mono">ACESSO_CONCEDIDO</h1>
           </div>
@@ -86,228 +98,226 @@ export default function OfertaPage() {
           </div>
         </div>
 
-        <Card className="bg-gray-900 rounded-xl overflow-hidden shadow-2xl border border-green-500/30">
+        {/* Main Offer Card */}
+        <Card className="bg-gray-900 rounded-xl overflow-hidden shadow-2xl border border-green-500/30 mb-8">
           <div className="bg-gradient-to-r from-green-900 to-green-800 p-6 text-center border-b border-green-500/30">
             <div className="flex items-center justify-center space-x-2 mb-2">
               <Cpu className="h-6 w-6 text-green-400" />
               <h2 className="text-2xl font-bold text-green-400 font-mono">IMPÉRIO_DIGITAL.exe</h2>
             </div>
             <p className="text-green-300 mt-2 font-mono">
-              Sistema completo para criação de negócios digitais com ChatGPT
+              Sistema completo para criar sites e landing pages com IA e cobrar até R$ 5.000 por projeto
             </p>
           </div>
 
           <div className="p-6">
-            <div className="flex flex-col md:flex-row gap-6">
-              <div className="md:w-1/2">
-                <div className="aspect-video relative rounded-lg overflow-hidden mb-4 border border-green-500/30">
-                  <Image
-                    src="/placeholder.svg?height=300&width=500"
-                    alt="Curso Renda Extra com IA"
-                    fill
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-0 bg-black/70 flex items-center justify-center">
-                    <Code className="h-16 w-16 text-green-400" />
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <Star key={star} className="h-5 w-5 text-yellow-400 fill-current" />
-                    ))}
-                  </div>
-                  <span className="text-green-400 font-mono text-sm">4.9/5 (2,847 reviews)</span>
-                </div>
-
-                <div className="space-y-3">
-                  <div className="flex items-center text-green-300">
-                    <CheckCircle className="h-5 w-5 mr-2 text-green-400" />
-                    <span className="font-mono text-sm">+50 prompts testados e aprovados</span>
-                  </div>
-                  <div className="flex items-center text-green-300">
-                    <CheckCircle className="h-5 w-5 mr-2 text-green-400" />
-                    <span className="font-mono text-sm">Estratégias de monetização comprovadas</span>
-                  </div>
-                  <div className="flex items-center text-green-300">
-                    <CheckCircle className="h-5 w-5 mr-2 text-green-400" />
-                    <span className="font-mono text-sm">Suporte técnico 24/7</span>
-                  </div>
-                  <div className="flex items-center text-green-300">
-                    <CheckCircle className="h-5 w-5 mr-2 text-green-400" />
-                    <span className="font-mono text-sm">Garantia de 30 dias</span>
-                  </div>
-                </div>
+            {/* Earnings Alert */}
+            <div className="mb-8 bg-yellow-900/30 border border-yellow-500/50 p-4 rounded-lg">
+              <div className="text-yellow-400 font-mono text-center">
+                <strong>🎯 VOCÊ ACABOU DE PROVAR QUE FUNCIONA!</strong>
+                <br />
+                <span className="text-xl mt-2 block">
+                  Ganhou R$ {earnings} em apenas uma simulação.
+                  <br />
+                  Imagine fazendo isso todos os dias...
+                </span>
               </div>
+            </div>
 
-              <div className="md:w-1/2">
-                <div className="bg-gray-800 p-6 rounded-lg border border-green-500/30">
-                  <div className="text-center mb-6">
-                    <div className="text-gray-400 line-through text-lg font-mono">De: R$ 497,00</div>
-                    <div className="text-3xl font-bold text-green-400 font-mono">Por: R$ 97,00</div>
-                    <div className="text-red-400 font-mono text-sm mt-1">Desconto de 80% - Apenas hoje!</div>
+            {/* Main Content Grid */}
+            <div className="grid md:grid-cols-2 gap-8">
+              {/* Left Column - Features */}
+              <div>
+                <h3 className="text-green-400 font-mono font-bold text-xl mb-4">O QUE VOCÊ VAI RECEBER:</h3>
+                <div className="space-y-4">
+                  <div className="flex items-start">
+                    <CheckCircle className="h-5 w-5 text-green-400 mt-1 mr-3 flex-shrink-0" />
+                    <div>
+                      <h4 className="text-green-300 font-mono font-bold">Curso Completo em Vídeo</h4>
+                      <p className="text-green-300/70 font-mono text-sm">4 horas de conteúdo prático e direto ao ponto</p>
+                    </div>
                   </div>
-
-                  <div className="space-y-4 mb-6">
-                    <h3 className="text-green-400 font-mono font-bold text-lg">O que você vai receber:</h3>
-                    <ul className="space-y-2 text-green-300 font-mono text-sm">
-                      <li>• Curso completo em vídeo (4h de conteúdo)</li>
-                      <li>• E-book com 100+ prompts prontos</li>
-                      <li>• Templates de landing pages</li>
-                      <li>• Scripts de vendas testados</li>
-                      <li>• Grupo VIP no Telegram</li>
-                      <li>• Bônus: Automação com ChatGPT</li>
-                    </ul>
+                  <div className="flex items-start">
+                    <CheckCircle className="h-5 w-5 text-green-400 mt-1 mr-3 flex-shrink-0" />
+                    <div>
+                      <h4 className="text-green-300 font-mono font-bold">100+ Prompts Prontos</h4>
+                      <p className="text-green-300/70 font-mono text-sm">Copie e cole para criar sites profissionais em minutos</p>
+                    </div>
                   </div>
-
-                  <div className="space-y-3">
-                    <Button
-                      className="w-full bg-green-600 hover:bg-green-700 text-black font-bold py-4 text-lg font-mono"
-                      onClick={() => window.open("https://pay.hotmart.com/exemplo", "_blank")}
-                    >
-                      QUERO GARANTIR MINHA VAGA
-                      <ArrowRight className="ml-2 h-5 w-5" />
-                    </Button>
-
-                    <div className="text-center">
-                      <div className="text-green-400 font-mono text-xs">Pagamento 100% seguro</div>
-                      <div className="text-green-400 font-mono text-xs">Acesso imediato após confirmação</div>
+                  <div className="flex items-start">
+                    <CheckCircle className="h-5 w-5 text-green-400 mt-1 mr-3 flex-shrink-0" />
+                    <div>
+                      <h4 className="text-green-300 font-mono font-bold">Templates Premium</h4>
+                      <p className="text-green-300/70 font-mono text-sm">20 modelos de sites que vendem por R$ 2.000 a R$ 5.000</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start">
+                    <CheckCircle className="h-5 w-5 text-green-400 mt-1 mr-3 flex-shrink-0" />
+                    <div>
+                      <h4 className="text-green-300 font-mono font-bold">Scripts de Vendas</h4>
+                      <p className="text-green-300/70 font-mono text-sm">Exatamente o que falar para fechar clientes</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start">
+                    <CheckCircle className="h-5 w-5 text-green-400 mt-1 mr-3 flex-shrink-0" />
+                    <div>
+                      <h4 className="text-green-300 font-mono font-bold">Grupo VIP no Telegram</h4>
+                      <p className="text-green-300/70 font-mono text-sm">Suporte direto comigo + networking com alunos</p>
                     </div>
                   </div>
                 </div>
 
-                <div className="mt-6 bg-yellow-900/30 border border-yellow-500/50 p-4 rounded-lg">
-                  <div className="text-yellow-400 font-mono text-sm text-center">
-                    <strong>ATENÇÃO:</strong> Você já ganhou R$ {earnings} na simulação!
-                    <br />
-                    Imagine o que pode fazer com o sistema completo...
+                {/* Bonus Section */}
+                <div className="mt-8">
+                  <div className="bg-yellow-900/30 border border-yellow-500/50 p-4 rounded-lg">
+                    <h4 className="text-yellow-400 font-mono font-bold text-lg mb-3">🎁 BÔNUS EXCLUSIVOS:</h4>
+                    <ul className="space-y-3">
+                      <li className="flex items-center text-yellow-300 font-mono text-sm">
+                        <Gift className="h-4 w-4 mr-2 text-yellow-400" />
+                        Prompt secreto que gera R$ 500+ por projeto
+                      </li>
+                      <li className="flex items-center text-yellow-300 font-mono text-sm">
+                        <Gift className="h-4 w-4 mr-2 text-yellow-400" />
+                        Lista de 50 clientes que pagam R$ 2.000+
+                      </li>
+                      <li className="flex items-center text-yellow-300 font-mono text-sm">
+                        <Gift className="h-4 w-4 mr-2 text-yellow-400" />
+                        Mentoria particular de 1 hora (Valor: R$ 500)
+                      </li>
+                    </ul>
                   </div>
+                </div>
+              </div>
+
+              {/* Right Column - Pricing & CTA */}
+              <div>
+                <div className="bg-gray-800 p-6 rounded-lg border border-green-500/30">
+                  {/* Timer & Scarcity */}
+                  <div className="text-center mb-6">
+                    <div className="bg-red-900/30 border border-red-500/50 p-3 rounded-lg mb-4">
+                      <h3 className="text-red-400 font-mono font-bold">⚠️ ATENÇÃO: OFERTA LIMITADA</h3>
+                      <p className="text-red-300/80 font-mono text-sm mt-1">
+                        Apenas {remainingSpots} vagas com este preço especial
+                      </p>
+                    </div>
+
+                    <div className="text-4xl font-bold mb-2">
+                      <span className="text-gray-400 line-through text-2xl">R$ 1.497</span>
+                      <br />
+                      <span className="text-green-400">R$ 97</span>
+                    </div>
+                    <p className="text-green-300/70 font-mono">12x de R$ 9,70 sem juros</p>
+                  </div>
+
+                  {/* Security Badges */}
+                  <div className="grid grid-cols-2 gap-4 mb-6">
+                    <div className="bg-gray-900/50 p-3 rounded-lg text-center">
+                      <Lock className="h-5 w-5 text-green-400 mx-auto mb-2" />
+                      <p className="text-green-300 font-mono text-xs">Pagamento Seguro</p>
+                    </div>
+                    <div className="bg-gray-900/50 p-3 rounded-lg text-center">
+                      <Shield className="h-5 w-5 text-green-400 mx-auto mb-2" />
+                      <p className="text-green-300 font-mono text-xs">Garantia de 30 dias</p>
+                    </div>
+                  </div>
+
+                  {/* CTA Button */}
+                  <Button
+                    className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-black font-bold py-6 text-xl font-mono relative overflow-hidden group"
+                    onClick={() => window.open("https://pay.hotmart.com/exemplo", "_blank")}
+                  >
+                    <span className="absolute inset-0 bg-white/20 animate-pulse rounded-full"></span>
+                    <span className="relative flex items-center justify-center">
+                      GARANTIR MINHA VAGA AGORA
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </span>
+                  </Button>
+
+                  {/* Trust Elements */}
+                  <div className="mt-4 text-center space-y-2">
+                    <p className="text-green-300/70 font-mono text-sm flex items-center justify-center">
+                      <Lock className="h-4 w-4 mr-1" />
+                      Acesso imediato após confirmação
+                    </p>
+                    <p className="text-green-300/70 font-mono text-sm flex items-center justify-center">
+                      <Shield className="h-4 w-4 mr-1" />
+                      7 dias de garantia incondicional
+                    </p>
+                  </div>
+                </div>
+
+                {/* Urgency Banner */}
+                <div className="mt-6 bg-red-900/30 border border-red-500/50 p-4 rounded-lg text-center">
+                  <p className="text-red-400 font-mono text-sm font-bold">
+                    ⚠️ Esta oferta expira em {formatTime(timeLeft)}
+                    <br />
+                    Após este tempo, o preço volta para R$ 1.497
+                  </p>
                 </div>
               </div>
             </div>
           </div>
         </Card>
 
-        <div className="mt-8 text-center">
-          <div className="bg-gray-900 border border-green-500/30 p-6 rounded-lg">
-            <h3 className="text-green-400 font-mono font-bold text-xl mb-4">Depoimentos de Alunos</h3>
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="bg-gray-800 p-4 rounded border border-green-500/20">
-                <p className="text-green-300 font-mono text-sm mb-2">
-                  "Em 30 dias já recuperei o investimento. Agora ganho mais de R$ 3.000/mês!"
-                </p>
-                <div className="text-green-400 font-mono text-xs">- Maria S., Designer</div>
+        {/* Social Proof Section */}
+        <div className="mt-12 bg-gray-900 rounded-xl p-8 border border-green-500/30">
+          <h3 className="text-center text-2xl font-bold text-green-400 font-mono mb-8">ALUNOS QUE JÁ ESTÃO LUCRANDO</h3>
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              {
+                name: "Carlos Silva",
+                earnings: "R$ 3.750",
+                text: "Fiz 3 sites em 2 semanas usando IA. Cobrei R$ 1.250 cada. Nunca foi tão fácil ganhar dinheiro!",
+              },
+              {
+                name: "Ana Oliveira",
+                earnings: "R$ 2.997",
+                text: "O método é incrível! Em 1 mês já recuperei o investimento várias vezes. Os clientes adoram!",
+              },
+              {
+                name: "Roberto Santos",
+                earnings: "R$ 5.000",
+                text: "Fechei um projeto por R$ 5.000 usando os templates do curso. O cliente ficou impressionado!",
+              },
+            ].map((testimonial, index) => (
+              <div key={index} className="bg-gray-800 p-6 rounded-lg border border-green-500/20">
+                <div className="flex items-center mb-4">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-green-400 to-green-600 flex items-center justify-center text-black font-bold text-xl">
+                    {testimonial.name[0]}
+                  </div>
+                  <div className="ml-4">
+                    <h4 className="text-green-400 font-mono font-bold">{testimonial.name}</h4>
+                    <div className="flex text-yellow-400">
+                      {Array(5).fill(null).map((_, i) => (
+                        <Star key={i} className="h-4 w-4 fill-current" />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <p className="text-green-300/70 font-mono text-sm mb-4">"{testimonial.text}"</p>
+                <div className="bg-green-900/30 p-3 rounded-lg border border-green-500/30">
+                  <div className="flex items-center justify-between">
+                    <span className="text-green-300 font-mono text-sm">Faturamento:</span>
+                    <span className="text-green-400 font-mono font-bold">{testimonial.earnings}</span>
+                  </div>
+                </div>
               </div>
-              <div className="bg-gray-800 p-4 rounded border border-green-500/20">
-                <p className="text-green-300 font-mono text-sm mb-2">
-                  "O sistema é incrível! Automatizei tudo e trabalho apenas 2h por dia."
-                </p>
-                <div className="text-green-400 font-mono text-xs">- João P., Programador</div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
 
-        {/* Seção de Revelação e CTA Final */}
-        <div className="mt-12 bg-gradient-to-r from-red-900 to-red-800 border-2 border-red-500 p-8 rounded-lg relative overflow-hidden">
-          <div className="absolute inset-0 bg-black/20"></div>
-          <div className="relative z-10">
-            <div className="text-center mb-6">
-              <h2 className="text-4xl font-bold text-red-400 font-mono mb-4 animate-pulse">🚨 REVELAÇÃO CHOCANTE 🚨</h2>
-              <div className="bg-black/50 p-6 rounded border border-red-500/50 mb-6">
-                <p className="text-red-300 font-mono text-lg leading-relaxed">
-                  <strong className="text-red-400">TUDO O QUE VOCÊ ACABOU DE VIVENCIAR FOI CRIADO POR IA!</strong>
-                  <br />
-                  <br />• O chat que te atendeu? <span className="text-red-400">ChatGPT</span>
-                  <br />• A simulação de atendimento? <span className="text-red-400">IA</span>
-                  <br />• Esta página de vendas? <span className="text-red-400">IA</span>
-                  <br />• Todo o design e navegação? <span className="text-red-400">IA</span>
-                  <br />• Os textos persuasivos? <span className="text-red-400">IA</span>
-                </p>
-              </div>
-            </div>
-
-            <div className="bg-yellow-900/30 border-2 border-yellow-500 p-6 rounded-lg mb-6">
-              <h3 className="text-yellow-400 font-mono font-bold text-2xl mb-4 text-center">
-                E VOCÊ VAI APRENDER A FAZER EXATAMENTE ISSO!
-              </h3>
-              <div className="grid md:grid-cols-2 gap-4 text-yellow-300 font-mono">
-                <div>
-                  <h4 className="text-yellow-400 font-bold mb-2">SERVIÇOS QUE VOCÊ PODERÁ CRIAR:</h4>
-                  <ul className="space-y-1 text-sm">
-                    <li>• Landing pages que convertem</li>
-                    <li>• Chatbots de atendimento</li>
-                    <li>• E-commerces completos</li>
-                    <li>• Sistemas de agendamento</li>
-                    <li>• Apps e sites personalizados</li>
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="text-yellow-400 font-bold mb-2">QUANTO VOCÊ PODE COBRAR:</h4>
-                  <ul className="space-y-1 text-sm">
-                    <li>• Landing page: R$ 800 - R$ 3.000</li>
-                    <li>• Chatbot: R$ 1.500 - R$ 5.000</li>
-                    <li>• E-commerce: R$ 3.000 - R$ 15.000</li>
-                    <li>• Sistema completo: R$ 10.000+</li>
-                    <li>• Consultoria IA: R$ 200/hora</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-black border-2 border-green-500 p-6 rounded-lg mb-6">
-              <div className="text-center">
-                <h3 className="text-green-400 font-mono font-bold text-3xl mb-4">
-                  ÚLTIMA CHANCE - OFERTA EXPIRA EM {formatTime(timeLeft)}
-                </h3>
-                <div className="text-red-400 font-mono text-xl mb-4">
-                  ⚠️ APENAS {Math.floor(Math.random() * 8) + 3} VAGAS RESTANTES ⚠️
-                </div>
-
-                <div className="bg-green-900/30 border border-green-500/50 p-4 rounded mb-4">
-                  <h4 className="text-green-400 font-bold text-xl mb-2">🎁 BÔNUS EXCLUSIVO SE COMPRAR AGORA:</h4>
-                  <div className="text-green-300 font-mono text-sm space-y-1">
-                    <p>• Acesso ao meu prompt secreto que gera R$ 500+ por projeto</p>
-                    <p>• Lista de 50 clientes que pagam R$ 2.000+ por landing page</p>
-                    <p>• Template pronto para cobrar R$ 5.000 por chatbot</p>
-                    <p>• Mentoria particular de 1 hora comigo (Valor: R$ 500)</p>
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <div className="text-center">
-                    <div className="text-gray-400 line-through text-2xl font-mono">R$ 1.497,00</div>
-                    <div className="text-5xl font-bold text-green-400 font-mono">R$ 97,00</div>
-                    <div className="text-red-400 font-mono text-lg">12x de R$ 9,70 sem juros</div>
-                  </div>
-
-                  <Button
-                    className="w-full bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-black font-bold py-6 text-2xl font-mono border-2 border-green-400 shadow-lg transform hover:scale-105 transition-all duration-200"
-                    onClick={() => window.open("https://pay.hotmart.com/exemplo", "_blank")}
-                  >
-                    🚀 SIM! QUERO DOMINAR A IA AGORA! 🚀
-                  </Button>
-
-                  <div className="text-center space-y-2">
-                    <div className="text-green-400 font-mono text-sm">
-                      ✅ Acesso imediato após confirmação do pagamento
-                    </div>
-                    <div className="text-green-400 font-mono text-sm">✅ Garantia incondicional de 30 dias</div>
-                    <div className="text-green-400 font-mono text-sm">✅ Suporte prioritário 24/7</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="text-center bg-red-900/50 border border-red-500/50 p-4 rounded">
-              <p className="text-red-300 font-mono text-lg font-bold">
-                ⚠️ ATENÇÃO: Esta oferta NUNCA mais será repetida!
-                <br />
-                Depois que o timer zerar, o preço volta para R$ 1.497,00
-              </p>
-            </div>
-          </div>
+        {/* Final CTA */}
+        <div className="mt-12 text-center">
+          <Button
+            className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-black font-bold py-6 px-12 text-xl font-mono inline-flex items-center"
+            onClick={() => window.open("https://pay.hotmart.com/exemplo", "_blank")}
+          >
+            QUERO COMEÇAR AGORA
+            <ArrowRight className="ml-2 h-5 w-5" />
+          </Button>
+          <p className="mt-4 text-green-300/70 font-mono text-sm">
+            Apenas {remainingSpots} vagas restantes com este preço especial
+          </p>
         </div>
       </div>
     </div>
